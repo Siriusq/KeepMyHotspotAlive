@@ -12,8 +12,11 @@ namespace KeepMyHotspotAlive
         private NotifyIcon trayIcon;
         private System.Timers.Timer pingTimer;
         private string gatewayIP;
-        private const int pingInterval = 30000; // 30秒
+        private const int pingInterval = 30000; // Ping间隔默认30秒
 
+        /// <summary>
+        /// 初始化
+        /// </summary>
         public Tray()
         {
             // 初始化语言
@@ -47,6 +50,10 @@ namespace KeepMyHotspotAlive
             Task.Run(() => PerformPing());
         }
 
+        /// <summary>
+        /// 获取网关IP地址
+        /// </summary>
+        /// <returns>网关IP地址</returns>
         private string GetGatewayIP()
         {
             foreach (NetworkInterface ni in NetworkInterface.GetAllNetworkInterfaces())
@@ -66,6 +73,9 @@ namespace KeepMyHotspotAlive
             return null;
         }
 
+        /// <summary>
+        /// 初始化计时器
+        /// </summary>
         private void InitializeTimer()
         {
             pingTimer = new System.Timers.Timer(pingInterval);
@@ -74,6 +84,9 @@ namespace KeepMyHotspotAlive
             pingTimer.Start();
         }
 
+        /// <summary>
+        /// 执行Ping操作并更新托盘图标提示
+        /// </summary>
         private async Task PerformPing()
         {
             try
@@ -92,6 +105,9 @@ namespace KeepMyHotspotAlive
             }
         }
 
+        /// <summary>
+        /// 更新托盘图标提示
+        /// </summary>
         private void UpdateTooltip(string text)
         {
             if (trayIcon != null)
@@ -100,6 +116,9 @@ namespace KeepMyHotspotAlive
             }
         }
 
+        /// <summary>
+        /// 暂停/继续Ping功能
+        /// </summary>
         private void OnPauseResume(object sender, EventArgs e)
         {
             var menuItem = (ToolStripMenuItem)sender;
@@ -114,10 +133,14 @@ namespace KeepMyHotspotAlive
             {
                 pingTimer.Start();
                 menuItem.Text = Resources.MenuPause;
+                gatewayIP = GetGatewayIP(); // 刷新路由器IP
                 Task.Run(() => PerformPing()); // 立即执行一次Ping
             }
         }
 
+        /// <summary>
+        /// 退出程序
+        /// </summary>
         private void OnExit(object sender, EventArgs e)
         {
             pingTimer?.Dispose();
@@ -125,6 +148,9 @@ namespace KeepMyHotspotAlive
             Application.Exit();
         }
 
+        /// <summary>
+        /// 弹出报错信息并自动退出
+        /// </summary>
         private void ShowErrorAndExit(string message, string title)
         {
             MessageBox.Show(message, title,
