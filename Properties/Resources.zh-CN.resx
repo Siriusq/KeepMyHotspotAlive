@@ -144,4 +144,7 @@
   <data name="PingSuccess" xml:space="preserve">
     <value>成功</value>
   </data>
+  <data name="StatusNetworkChanged" xml:space="preserve">
+    <value>检测到网络更改，ping 已暂停</value>
+  </data>
 </root>

@@ -148,4 +148,7 @@
   <data name="PingSuccess" xml:space="preserve">
     <value>Successful</value>
   </data>
+  <data name="StatusNetworkChanged" xml:space="preserve">
+    <value>Network changed, ping stopped.</value>
+  </data>
 </root>

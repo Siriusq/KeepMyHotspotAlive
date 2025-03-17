@@ -2,6 +2,8 @@
 using System;
 using System.Drawing;
 using System.Net.NetworkInformation;
+using System.Runtime.InteropServices;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -51,6 +53,30 @@ namespace KeepMyHotspotAlive
         }
 
         /// <summary>
+        /// 检测到设备连接的无线网络变化时自动暂停ping操作
+        /// </summary>
+        private bool DetectNetworkAddressChange()
+        {
+            // 获取新网关地址
+            string newGateway = GetGatewayIP();
+
+            // 网关发生变化时处理
+            if (newGateway != gatewayIP)
+            {
+                // 自动暂停
+                if (pingTimer.Enabled)
+                {
+                    pingTimer.Stop();
+                    trayIcon.ContextMenuStrip.Items[0].Text = Resources.MenuResume;
+                    UpdateTooltip(Resources.StatusNetworkChanged);
+                }
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// 获取网关IP地址
         /// </summary>
         /// <returns>网关IP地址</returns>
@@ -91,6 +117,12 @@ namespace KeepMyHotspotAlive
         {
             try
             {
+                // 检测网关地址是否变化
+                if (DetectNetworkAddressChange())
+                {
+                    return;
+                }
+
                 using (Ping ping = new Ping())
                 {
                     PingReply reply = await ping.SendPingAsync(gatewayIP, 1000);

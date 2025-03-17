@@ -150,5 +150,14 @@ namespace KeepMyHotspotAlive.Properties {
                 return ResourceManager.GetString("PingSuccess", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   查找类似 Network changed, ping stopped. 的本地化字符串。
+        /// </summary>
+        public static string StatusNetworkChanged {
+            get {
+                return ResourceManager.GetString("StatusNetworkChanged", resourceCulture);
+            }
+        }
     }
 }
