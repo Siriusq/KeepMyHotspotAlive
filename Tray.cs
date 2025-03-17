@@ -12,7 +12,7 @@ namespace KeepMyHotspotAlive
         private NotifyIcon trayIcon;
         private System.Timers.Timer pingTimer;
         private string gatewayIP;
-        private const int pingInterval = 30000; // Ping间隔默认30秒
+        private const int pingInterval = 15000; // Ping间隔默认15秒
 
         /// <summary>
         /// 初始化
