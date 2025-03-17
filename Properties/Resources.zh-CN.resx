@@ -118,30 +118,30 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ErrorGatewayMsg" xml:space="preserve">
-    <value>Failed to detect iPhone hotspot.</value>
+    <value>无法检测到iPhone热点</value>
   </data>
   <data name="ErrorGatewayTitle" xml:space="preserve">
-    <value>Hotspot Error</value>
+    <value>热点错误</value>
   </data>
   <data name="MenuExit" xml:space="preserve">
-    <value>Exit</value>
+    <value>退出</value>
   </data>
   <data name="MenuPause" xml:space="preserve">
-    <value>Pause</value>
+    <value>暂停</value>
   </data>
   <data name="MenuPaused" xml:space="preserve">
-    <value>Paused</value>
+    <value>已暂停</value>
   </data>
   <data name="MenuResume" xml:space="preserve">
-    <value>Resume</value>
+    <value>继续</value>
   </data>
   <data name="PingError" xml:space="preserve">
-    <value>Error</value>
+    <value>错误</value>
   </data>
   <data name="PingFailed" xml:space="preserve">
-    <value>Failed</value>
+    <value>失败</value>
   </data>
   <data name="PingSuccess" xml:space="preserve">
-    <value>Successful</value>
+    <value>成功</value>
   </data>
 </root>

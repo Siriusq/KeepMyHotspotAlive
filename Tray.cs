@@ -1,11 +1,9 @@
-﻿using System;
-using System.Net;
+﻿using KeepMyHotspotAlive.Properties;
+using System;
+using System.Drawing;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Timers;
-using System.Drawing;
-using System.Diagnostics;
 
 namespace KeepMyHotspotAlive
 {
@@ -18,6 +16,9 @@ namespace KeepMyHotspotAlive
 
         public Tray()
         {
+            // 初始化语言
+            LanguageManager.Initialize();
+
             // 初始化系统托盘图标
             trayIcon = new NotifyIcon()
             {
@@ -30,7 +31,7 @@ namespace KeepMyHotspotAlive
             gatewayIP = GetGatewayIP();
             if (string.IsNullOrEmpty(gatewayIP))
             {
-                ShowErrorAndExit("无法自动检测到iPhone热点网关IP，请确认已连接热点");
+                ShowErrorAndExit(Resources.ErrorGatewayMsg, Resources.ErrorGatewayTitle);
                 return;
             }
 
@@ -38,8 +39,8 @@ namespace KeepMyHotspotAlive
             InitializeTimer();
 
             // 创建上下文菜单
-            var pauseResumeItem = new ToolStripMenuItem("暂停", null, OnPauseResume);
-            var exitItem = new ToolStripMenuItem("退出", null, OnExit);
+            var pauseResumeItem = new ToolStripMenuItem(Resources.MenuPause, null, OnPauseResume);
+            var exitItem = new ToolStripMenuItem(Resources.MenuExit, null, OnExit);
             trayIcon.ContextMenuStrip.Items.AddRange(new ToolStripItem[] { pauseResumeItem, exitItem });
 
             // 首次立即执行一次Ping
@@ -81,13 +82,13 @@ namespace KeepMyHotspotAlive
                 {
                     PingReply reply = await ping.SendPingAsync(gatewayIP, 1000);
                     UpdateTooltip(reply.Status == IPStatus.Success ?
-                                 $"最后Ping: {DateTime.Now:T} 成功" :
-                                 $"最后Ping: {DateTime.Now:T} 失败");
+                                 $"{DateTime.Now:T} Ping {gatewayIP} {Resources.PingSuccess}" :
+                                 $"{DateTime.Now:T} Ping {gatewayIP} {Resources.PingFailed}");
                 }
             }
             catch
             {
-                UpdateTooltip($"最后Ping: {DateTime.Now:T} 错误");
+                UpdateTooltip($"{DateTime.Now:T} Ping {gatewayIP} {Resources.PingError}");
             }
         }
 
@@ -106,13 +107,13 @@ namespace KeepMyHotspotAlive
             if (pingTimer.Enabled)
             {
                 pingTimer.Stop();
-                menuItem.Text = "继续";
-                trayIcon.Text = "已暂停";
+                menuItem.Text = Resources.MenuResume;
+                trayIcon.Text = Resources.MenuPaused;
             }
             else
             {
                 pingTimer.Start();
-                menuItem.Text = "暂停";
+                menuItem.Text = Resources.MenuPause;
                 Task.Run(() => PerformPing()); // 立即执行一次Ping
             }
         }
@@ -124,10 +125,11 @@ namespace KeepMyHotspotAlive
             Application.Exit();
         }
 
-        private void ShowErrorAndExit(string message)
+        private void ShowErrorAndExit(string message, string title)
         {
-            MessageBox.Show(message, "Hotspot Keeper",
+            MessageBox.Show(message, title,
                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+            pingTimer?.Dispose();
             trayIcon.Visible = false;
             Application.Exit();
         }
