@@ -25,7 +25,7 @@ namespace KeepMyHotspotAlive
             // 初始化系统托盘图标
             trayIcon = new NotifyIcon()
             {
-                Icon = SystemIcons.Application,
+                Icon = Resources.KeepMyHotspotAlive,
                 ContextMenuStrip = new ContextMenuStrip(),
                 Visible = true
             };
