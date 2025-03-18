@@ -1,9 +1,6 @@
 ﻿using KeepMyHotspotAlive.Properties;
 using System;
-using System.Drawing;
 using System.Net.NetworkInformation;
-using System.Runtime.InteropServices;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -68,6 +65,7 @@ namespace KeepMyHotspotAlive
                 {
                     pingTimer.Stop();
                     trayIcon.ContextMenuStrip.Items[0].Text = Resources.MenuResume;
+                    ShowBalloonTip(Resources.StatusNetworkChanged);
                     UpdateTooltip(Resources.StatusNetworkChanged);
                 }
                 return true;
@@ -145,6 +143,20 @@ namespace KeepMyHotspotAlive
             if (trayIcon != null)
             {
                 trayIcon.Text = text;
+            }
+        }
+
+        /// <summary>
+        /// 侦测到网络变动时弹出Toast通知
+        /// </summary>
+        private void ShowBalloonTip(string text)
+        {
+            if (trayIcon != null)
+            {
+                trayIcon.BalloonTipIcon = ToolTipIcon.Warning;
+                trayIcon.BalloonTipTitle = "Keep My Hotspot Alive";
+                trayIcon.BalloonTipText = text;
+                trayIcon.ShowBalloonTip(0);
             }
         }
 
